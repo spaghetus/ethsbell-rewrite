@@ -27,6 +27,7 @@ schemars = {version = "0.8.3", features = ["chrono"], optional = true}
 okapi = { version = "0.5.0-alpha-1", features = ["derive_json_schema"], optional = true }
 
 hcp-common = {git = "https://github.com/spaghetus/hcp-rs", optional = true}
+serde_yaml = {version = "*", optional = true}
 
 [build-dependencies]
 subprocess = "*"
@@ -46,4 +47,4 @@ required-features = ["ws"]
 default = ["ws", "hcp"]
 ws = ["rocket", "rocket_contrib", "pull", "rocket_okapi", "schemars", "okapi", "rocket_prometheus"]
 pull = ["reqwest"]
-hcp = ["hcp-common"]
+hcp = ["hcp-common", "serde_yaml"]

@@ -1,0 +1,35 @@
+content:
+  - Text: "ETHSBell HCP Test"
+  - Live:
+      - "/api/hcp/live"
+      - 30
+  - HLayout:
+      - Text: "Column 1"
+      - Text: "Column 2"
+      - VLayout:
+          - Text: "C3 R1"
+          - Text: "C3 R2"
+  - Table:
+      - HLayout:
+          - Text: "Column 1"
+          - Text: "Column 2"
+      - HLayout:
+          - Text: "Value 1"
+          - Text: "Value 2"
+  - Blob:
+      - "/favicon.ico"
+      - "image/x-icon"
+      - "ETHSBell Icon"
+  - Menu:
+      - Text: Menu Header
+      - Ref:
+          - "/api/hcp/live"
+          - "Live Page"
+  - Form:
+      - - Text: "Form Header"
+        - Field:
+            - test
+            - Test
+            - text
+      - "/api/hcp/form"
+extra: {}

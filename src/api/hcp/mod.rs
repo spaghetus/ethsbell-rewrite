@@ -22,7 +22,7 @@ fn head_root() -> Json<Header> {
 
 #[post("/", data = "<_data>")]
 fn get_root(_data: Json<Request>) -> Json<Response> {
-	Json(serde_json::from_str(include_str!("./home.hcf")).unwrap())
+	Json(serde_yaml::from_str(include_str!("./home.hcf.yaml")).unwrap())
 }
 
 #[get("/live")]
@@ -41,7 +41,7 @@ fn get_live(_data: Json<Request>, schedule: State<Arc<RwLock<Schedule>>>) -> Jso
 		.0
 		.at_time(now.time())
 		.1;
-	let mut doc: Response = serde_json::from_str(include_str!("./live.hcf")).unwrap();
+	let mut doc: Response = serde_yaml::from_str(include_str!("./live.hcf.yaml")).unwrap();
 	let mut context = HashMap::new();
 	let mut flags = vec![];
 	match period.iter().next() {

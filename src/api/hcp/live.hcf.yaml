@@ -1,0 +1,9 @@
+content:
+  - InlineLayout:
+      - If:
+          - period
+          - InlineLayout:
+              - Text: "The current period is"
+              - Ctx: period-name
+          - Text: "There is no current period."
+extra: {}
