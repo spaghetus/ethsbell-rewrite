@@ -289,7 +289,7 @@ fn today_code(
 fn today_now(
 	schedule: State<Arc<RwLock<Schedule>>>,
 	timestamp: Option<i64>,
-) -> Result<Json<Vec<Period>>, String> {
+) -> Option<Json<Vec<Period>>> {
 	Schedule::update_if_needed_async(schedule.clone());
 	let now = match timestamp {
 		None => Local::now(),
@@ -303,9 +303,9 @@ fn today_now(
 	match schedule.0.at_time(now_time).1 {
 		mut period if !period.is_empty() => {
 			period.iter_mut().for_each(|v| *v = v.clone().populate(now));
-			Ok(Json(period))
+			Some(Json(period))
 		}
-		_ => Err(String::from("There's no schedule right now, sorry.")),
+		_ => None,
 	}
 }
 

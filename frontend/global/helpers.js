@@ -141,8 +141,12 @@ function human_time_left(endTime, startTime = null, short = false) {
 }
 
 // Convert date object to YYYY-MM-DD
-function date_to_string(date = current_date()) {
-	return `${date.getUTCFullYear()}-${('0' + (date.getUTCMonth() + 1)).slice(-2)}-${('0' + date.getUTCDate()).slice(-2)}`;
+function date_to_string(date = current_date(), utc = true) {
+	if (utc) {
+		return `${date.getUTCFullYear()}-${('0' + (date.getUTCMonth() + 1)).slice(-2)}-${('0' + date.getUTCDate()).slice(-2)}`;
+	}
+
+	return `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
 }
 
 // Helper functions for full screen
@@ -209,7 +213,7 @@ function bytes_to_color(bytes) {
 }
 
 // Detect whether text should be black or white based on the background color
-function black_or_white(color) {
+function black_or_white(color, opacity = 1) {
 	if (!color.startsWith('#')) {
 		color = `#${color}`;
 	}
@@ -218,7 +222,7 @@ function black_or_white(color) {
 	const g = Number.parseInt(color.slice(3, 5), 16);
 	const b = Number.parseInt(color.slice(5, 7), 16);
 	const luma = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
-	return luma > 128 ? 'black' : 'white';
+	return luma > 128 ? `rgba(0, 0, 0, ${opacity})` : `rgba(255, 255, 255, ${opacity})`;
 }
 
 function getUTCOffset() {

@@ -10,7 +10,7 @@ let schedules = {};
 let currentSchedule = {};
 
 getel('today').addEventListener('click', () => {
-	dateSelect.valueAsDate = current_date();
+	dateSelect.value = date_to_string(current_date(), false);
 	getDate(dateSelect.valueAsDate);
 });
 
@@ -25,14 +25,14 @@ getel('next').addEventListener('click', () => {
 });
 
 async function getDate(date = current_date(), setCurrent = false) {
-	const dateString = date_to_string(date);
+	const dateString = date_to_string(date, false);
 
 	const day = await get(`/api/v1/on/${dateString}`);
 	if (!day) {
 		return;
 	}
 
-	place_boxes(day.periods, date, true, setCurrent || dateString === date_to_string());
+	place_boxes(day, date, true, setCurrent || dateString === date_to_string(current_date(), false));
 
 	if (setCurrent) {
 		currentSchedule = day;
@@ -80,7 +80,7 @@ async function getSchedules() {
 }
 
 async function getScheduleList(start, end) {
-	const scheduleList = await get(`/api/v1/schedule/from/${date_to_string(start)}/to/${date_to_string(end)}`);
+	const scheduleList = await get(`/api/v1/schedule/from/${date_to_string(start, false)}/to/${date_to_string(end, false)}`);
 	if (!schedules) {
 		return;
 	}
@@ -100,7 +100,7 @@ async function getScheduleList(start, end) {
 		const textColor = black_or_white(backgroundColor);
 		return {
 			code: scheduleCode,
-			schedule: schedule?.periods || [],
+			data: schedule,
 			name,
 			date,
 			backgroundColor,
@@ -114,11 +114,11 @@ async function getScheduleList(start, end) {
 scheduleSelect.addEventListener('change', () => {
 	const selected = scheduleSelect.value;
 	if (schedules[selected]) {
-		place_boxes(schedules[selected].periods, current_date(), true, scheduleSelect.options[scheduleSelect.selectedIndex].text === currentSchedule.friendly_name);
+		place_boxes(schedules[selected], current_date(), true, scheduleSelect.options[scheduleSelect.selectedIndex].text === currentSchedule.friendly_name);
 	}
 });
 
-dateSelect.valueAsDate = current_date();
+dateSelect.value = date_to_string(current_date(), false);
 
 dateSelect.addEventListener('change', () => {
 	getDate(dateSelect.valueAsDate);
@@ -158,11 +158,11 @@ endOfNextWeek.setDate(endOfNextWeek.getDate() + (CALENDAR_WEEKS * 7));
 
 			td.querySelector('.day-schedule').style.backgroundColor = day.backgroundColor;
 			td.querySelector('.day-schedule').style.color = day.textColor;
-			if (day.schedule.length === 0) {
+			if (day.data.periods.length === 0) {
 				td.classList.add('no-periods');
 			} else {
 				td.addEventListener('click', () => {
-					place_boxes(day.schedule, day.date, true, day.date.toLocaleDateString() === current_date().toLocaleDateString());
+					place_boxes(day.data, day.date, true, day.date.toLocaleDateString() === current_date().toLocaleDateString());
 					scheduleSelect.value = day.code;
 					dateSelect.value = date_to_string(day.date);
 				});
