@@ -1,0 +1,13 @@
+{
+	"content": [
+		{
+			"Text": "ETHSBell HCP Test"
+		},
+		{
+			"Live": [
+				"/api/hcp/live",
+				30.0
+			]
+		}
+	]
+}

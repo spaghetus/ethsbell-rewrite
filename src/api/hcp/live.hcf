@@ -1,0 +1,27 @@
+{
+	"content": [
+		{
+			"InlineLayout": [
+				{
+					"If": [
+						"period",
+						{
+							"VLayout": [
+								{
+									"Text": "The current period is"
+								},
+								{
+									"Ctx": "period_name"
+								}
+							]
+						},
+						{
+							"Text": "There is no current period."
+						}
+					]
+				}
+			]
+		}
+	],
+	"extra": {}
+}

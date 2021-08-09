@@ -12,6 +12,14 @@ use rocket_okapi::{
 };
 
 use crate::login::WantsBasicAuth;
+#[cfg(feature = "hcp")]
+pub mod hcp;
+#[cfg(not(feature = "hcp"))]
+pub mod hcp {
+	pub fn routes() -> Vec<Route> {
+		routes![]
+	}
+}
 pub mod legacy;
 pub mod v1;
 
@@ -29,6 +37,7 @@ impl Fairing for ApiFairing {
 	fn on_attach(&self, rocket: rocket::Rocket) -> Result<rocket::Rocket, rocket::Rocket> {
 		Ok(rocket
 			.mount("/api/v1", v1::routes())
+			.mount("/api/hcp", hcp::routes())
 			.mount("/api/legacy", legacy::routes())
 			.mount(
 				"/docs/v1",
