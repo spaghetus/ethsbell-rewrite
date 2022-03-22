@@ -52,7 +52,9 @@
 		"wasm",
 		"wildkit"
 	],
-	"rust-analyzer.cargo.features": ["ws"],
+	"rust-analyzer.cargo.features": [
+		"ws"
+	],
 	"rust-analyzer.updates.channel": "nightly",
 	"nixEnvSelector.suggestion": false,
 	"rcover.testCommand": "cargo test --features ws",
@@ -67,5 +69,13 @@
 	"[html]": {
 		"editor.defaultFormatter": "vscode.html-language-features"
 	},
-	"html.format.indentInnerHtml": false
+	"html.format.indentInnerHtml": false,
+	"files.watcherExclude": {
+		"**/.git/objects/**": true,
+		"**/.git/subtree-cache/**": true,
+		"**/node_modules/*/**": true,
+		"**/.hg/store/**": true,
+		".flatpak/**": true,
+		"_build/**": true
+	}
 }
