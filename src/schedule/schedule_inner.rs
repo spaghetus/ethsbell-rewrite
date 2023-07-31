@@ -1,16 +1,14 @@
 use chrono::Datelike;
 use chrono::{Local, NaiveDate, NaiveDateTime};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::convert::TryInto;
 use std::{env, fs};
 
 use std::path::Path;
-#[cfg(feature = "pull")]
-use std::{
-	sync::{Arc, RwLock},
-	thread,
-};
+use std::sync::{Arc, RwLock};
+#[cfg(feature = "ws")]
+use std::thread;
 
 #[cfg(feature = "pull")]
 use super::{ical_to_ours, IcalEvent};
@@ -18,7 +16,7 @@ use super::{Event, ScheduleDefinition, ScheduleType};
 
 /// A structure containing all of the information we need to operate.
 #[cfg_attr(feature = "ws", derive(JsonSchema))]
-#[derive(Serialize, Clone, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Clone, PartialEq, Debug)]
 pub struct Schedule {
 	/// When this schedule's calendar data was last updated.
 	pub last_updated: NaiveDateTime,
@@ -63,6 +61,9 @@ impl Schedule {
 			thread::spawn(|| Schedule::update_async(schedule));
 		}
 	}
+	/// Dummy function to allow compiling without pull.
+	#[cfg(not(feature = "pull"))]
+	pub fn update_if_needed_async(_schedule: Arc<RwLock<Schedule>>) {}
 	/// Updates a schedule, locking minimally.
 	#[cfg(feature = "pull")]
 	pub fn update_async(schedule: Arc<RwLock<Schedule>>) {
